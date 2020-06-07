@@ -6,15 +6,14 @@ export class HttpErrorFilter implements ExceptionFilter{
         const ctx = host.switchToHttp();
         const request = ctx.getRequest();
         const response = ctx.getResponse();
-
         const status = exeption.getStatus();
         const errorResponse = {
             code: status,
             timestamp: new Date().toLocaleDateString(),
             path: request.url,
             method: request.method,
-            message: exeption.message || null
-        }
+            message: exeption.message || null,
+        };
 
         Logger.error(
             `${request.method} ${request.url}`,
@@ -22,6 +21,6 @@ export class HttpErrorFilter implements ExceptionFilter{
             'ExeptionFilter',
         );
 
-        response.status(404).json(errorResponse);
+        response.status(status).json(errorResponse);
     }
 }
