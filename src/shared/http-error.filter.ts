@@ -6,7 +6,7 @@ export class HttpErrorFilter implements ExceptionFilter{
         const ctx = host.switchToHttp();
         const request = ctx.getRequest();
         const response = ctx.getResponse();
-        const status = exeption.getStatus()? exeption.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
+        const status = exeption.getStatus? exeption.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
         const errorResponse = {
             code: status,
             timestamp: new Date().toLocaleDateString(),

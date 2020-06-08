@@ -12,7 +12,8 @@ export class UserDTO {
 export class UserRO {
     id: string;
     username: string;
-    token?: string;
     created: Date;
+    token?: string;
     ideas?: IdeaEntity[];
+    bookmarks?: IdeaEntity[]
 }

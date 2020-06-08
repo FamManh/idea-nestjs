@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, BeforeInsert, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, BeforeInsert, OneToMany, ManyToMany, JoinTable } from "typeorm";
 
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
@@ -25,21 +25,29 @@ export class UserEntity {
     @OneToMany(type=> IdeaEntity, idea=>idea.author)
     ideas: IdeaEntity[];
 
+    @ManyToMany(type=> IdeaEntity, {cascade: true})
+    @JoinTable()
+    bookmarks: IdeaEntity[];
+
     @BeforeInsert()
     async hashPassword() {
         this.password = await bcrypt.hash(this.password, 10);
     }
 
     toResponseObject(showToken: boolean = false): UserRO {
-        const { id, created, username, token, ideas } = this;
+        const { id, created, username, token, ideas, bookmarks } = this;
         const reponseObject: UserRO = { id, created, username };
         
         if(showToken){
             reponseObject.token = token;
         }
 
-        if(this.ideas){
-            reponseObject.ideas = this.ideas
+        if(ideas){
+            reponseObject.ideas = ideas
+        }
+
+        if(bookmarks){
+            reponseObject.bookmarks = bookmarks
         }
         reponseObject.ideas = ideas;
         return reponseObject;
